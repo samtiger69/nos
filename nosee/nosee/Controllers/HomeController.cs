@@ -17,37 +17,38 @@ namespace nosee.Controllers
             return View();
         }
 
-        private List<Item> ApiCaller()
-        {
-            var result = new List<Item>();
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://webservicesapi.apphb.com");
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            HttpResponseMessage response = client.GetAsync("api/Values").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var items = response.Content.ReadAsAsync<List<Item>>().Result;
-                foreach (var item in items)
-                {
-                    result.Add(item);
-                }
-            }
-            return result;
-        }
-
         public ActionResult About()
         {
-            var items = ApiCaller();
-
+            var items = new List<Item>();
+            using (ApiCaller apiCaller = new ApiCaller())
+            {
+                var item = apiCaller.GetItemById(2);
+                item.Name = "SamoSam2";
+                apiCaller.UpdateItem(item);
+                var updatedItem = apiCaller.GetItemById(2);
+                items = apiCaller.GetAllItems();
+            }
             return View(items);
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
 
-            return View();
+            return View(new Item());
+        }
+        
+        [HttpPost]
+        public ActionResult Contact(Item model)
+        {
+            var result = 0;
+            if(ModelState.IsValid)
+            {
+                using (ApiCaller apiCaller = new ApiCaller())
+                {
+                    result = apiCaller.InsertItem(model);
+                }
+            }
+            return RedirectToAction("About");
         }
     }
 }
