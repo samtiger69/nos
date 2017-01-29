@@ -47,8 +47,9 @@ namespace nosee.Controllers
                 {
                     result = apiCaller.InsertItem(model);
                 }
+                return RedirectToAction("About");
             }
-            return RedirectToAction("About");
+            return View(model);
         }
     }
 }
