@@ -22,10 +22,6 @@ namespace nosee.Controllers
             var items = new List<Item>();
             using (ApiCaller apiCaller = new ApiCaller())
             {
-                var item = apiCaller.GetItemById(2);
-                item.Name = "SamoSam2";
-                apiCaller.UpdateItem(item);
-                var updatedItem = apiCaller.GetItemById(2);
                 items = apiCaller.GetAllItems();
             }
             return View(items);
