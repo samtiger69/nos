@@ -30,6 +30,6 @@ namespace nosee.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<nosee.Models.Item> Items { get; set; }
+        public DbSet<Item> Items { get; set; }
     }
 }
